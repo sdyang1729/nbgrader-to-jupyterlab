@@ -10,13 +10,27 @@ import {
 } from '@lumino/coreutils';
 
 const NBGRADER_KEY = 'nbgrader';
-const NBGRADER_SCHEMA_VERSION = 3;
+export const NBGRADER_SCHEMA_VERSION = 3;
 
 /**
  * A namespace for conversions between {@link NbgraderData} and
  * {@link ToolData} and for reading and writing to notebook cells' metadata.
  */
 export namespace CellModel {
+  /**
+   * Removes the "cell_type" property from the nbgrader data.
+   */
+  export function clearCellType(cellMetadata: IObservableJSON): void {
+    const data = cellMetadata.get(NBGRADER_KEY) as JSONObject;
+    if (data == null) {
+      return;
+    }
+    if ('cell_type' in data) {
+      data['cell_type'] = undefined;
+    }
+    cellMetadata.set(NBGRADER_KEY, data);
+  }
+
   /**
    * Read the nbgrader data from a cell's metadata.
    *
@@ -31,6 +45,22 @@ export namespace CellModel {
       return null;
     }
     return nbgraderValue.valueOf() as NbgraderData;
+  }
+
+  /**
+   * @returns True if the cell is gradable.
+   */
+  export function isGraded(data: NbgraderData): boolean {
+    return PrivateNbgraderData.isGraded(data);
+  }
+
+  /**
+   * @returns True if the cell relevant to nbgrader. A cell is relevant if it is
+   * gradable or contains autograder tests.
+   */
+  export function isRelevantToNbgrader(data: NbgraderData): boolean {
+    return PrivateNbgraderData.isGraded(data)
+        || PrivateNbgraderData.isSolution(data);
   }
 
   /**
