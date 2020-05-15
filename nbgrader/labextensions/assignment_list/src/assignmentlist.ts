@@ -77,8 +77,9 @@ AssignmentList.prototype.clear_list = function (loading) {
         (<HTMLDivElement>elems[i].children.namedItem(this.list_error_ids[i])).hidden = true;
 
     } else {
-        // show placeholders
-        (<HTMLDivElement>elems[i].children.namedItem(this.list_placeholder_ids[i])).hidden = false;
+        // show placeholders display
+        // using hidden = false here does not work
+        (<HTMLDivElement>elems[i].children.namedItem(this.list_placeholder_ids[i])).style.display = 'block';
 
         // hide loading and errors
         (<HTMLDivElement>elems[i].children.namedItem(this.list_loading_ids[i])).hidden = true;
@@ -272,7 +273,7 @@ Assignment.prototype.make_row = function () {
   s.innerText = this.data['course_id']
   row.append(s)
 
-  var id, element, child;
+  var id, element;
   var children = document.createElement('div');
   if (this.data['status'] == 'submitted') {
     id = this.escape_id() + '-submissions';
@@ -285,8 +286,7 @@ Assignment.prototype.make_row = function () {
     children.append(d);
     for (var i=0; i<this.data['submissions'].length; i++) {
       element = document.createElement('div');
-      child = new Submission(element, this.data.submissions[i], this.options);
-      console.log(child.base_url);
+      new Submission(element, this.data.submissions[i], this.options);
       children.append(element);
     }
 
@@ -310,7 +310,7 @@ Assignment.prototype.make_row = function () {
           element = document.createElement('div');
           this.data.notebooks[i]['course_id'] = this.data['course_id'];
           this.data.notebooks[i]['assignment_id'] = this.data['assignment_id'];
-          child = new Notebook(element, this.data.notebooks[i], this.options);
+          new Notebook(element, this.data.notebooks[i], this.options);
           children.append(element);
       }
   }
@@ -328,18 +328,17 @@ AssignmentList.prototype.load_list_success = function (data) {
   var len = data.length;
   for (var i=0; i<len; i++) {
       var element = document.createElement('div');
-      var item = new Assignment(element, data[i], this.fetched_selector,
+      new Assignment(element, data[i], this.fetched_selector,
         (newData)=>{this.handle_load_list(newData)}, this.options);
-      console.log(item.base_url)
       if (data[i].status === 'released') {
         this.released_element.append(element);
-        (<HTMLDivElement>this.released_element.children.namedItem('released_assignments_list_placeholder')).hidden = true
+        (<HTMLDivElement>this.released_element.children.namedItem('released_assignments_list_placeholder')).style.removeProperty('display');
       } else if (data[i]['status'] === 'fetched') {
         this.fetched_element.append(element);
-        (<HTMLDivElement>this.fetched_element.children.namedItem('fetched_assignments_list_placeholder')).hidden = true
+        (<HTMLDivElement>this.fetched_element.children.namedItem('fetched_assignments_list_placeholder')).style.removeProperty('display');
       } else if (data[i]['status'] === 'submitted') {
         this.submitted_element.append(element);
-        (<HTMLDivElement>this.submitted_element.children.namedItem('submitted_assignments_list_placeholder')).hidden = true
+        (<HTMLDivElement>this.submitted_element.children.namedItem('submitted_assignments_list_placeholder')).style.removeProperty('display');
       }
   }
 
@@ -358,9 +357,8 @@ AssignmentList.prototype.load_list_success = function (data) {
       }
 
     }
-    
-    
   }
+
   if (this.callback) {
     this.callback();
     this.callback = undefined;
@@ -385,7 +383,7 @@ AssignmentList.prototype.show_error = function (error) {
 
     // show errors
     // FIX ME avoid doing all this casting
-    (<HTMLDivElement>elems[i].children.namedItem(this.list_error_ids[i])).hidden = false;
+    (<HTMLDivElement>elems[i].children.namedItem(this.list_error_ids[i])).style.display = 'block';
     (<HTMLDivElement>elems[i].children.namedItem(this.list_error_ids[i])).innerText = error;
 
     // hide loading and placeholding
@@ -408,7 +406,7 @@ AssignmentList.prototype.load_list = async function (course: string, callback: a
   this.clear_list(true);
   try {
     const data = await requestAPI<any>('assignments?course_id=' + course, { 
-      method: 'GET', // FIX ME NEED TO PASS IN THE COURSE ID
+      method: 'GET',
     });
     console.log(data);
     this.handle_load_list(data)
@@ -596,9 +594,15 @@ Notebook.prototype.validate = function (data, button) {
           var div = document.createElement('div');
           var paragraph = document.createElement('p');
           paragraph.innerText = 'The following cell failed:';
-          var pre = document.createElement('pre');
-          pre.innerText = data.failed[i].source;
-          pre.innerHTML = data.failed[i].error;
+          div.append(paragraph)
+          body.append(div)
+          var pre1 = document.createElement('pre');
+          pre1.innerText = data.failed[i].source;
+          body.append(pre1);
+          var pre2 = document.createElement('pre');
+          pre2.innerHTML = data.failed[i].error;
+          body.append(pre2)
+
         }
         body.classList.add("validation-failed");
         this.validate_failure(button);
@@ -626,7 +630,6 @@ Notebook.prototype.validate = function (data, button) {
 
     this.validate_failure(button);
   }
-
 
   showDialog({
     title: "Validation Results",
