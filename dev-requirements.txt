@@ -11,3 +11,4 @@ sphinx-autodoc-typehints
 codecov
 nbval
 requests-mock
+jupyterlab
