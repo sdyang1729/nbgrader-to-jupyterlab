@@ -9,8 +9,8 @@
 ## Make a clean conda environment.
 
  ```shell
- conda create -n nbgrader python==3.8.1 jupyterlab nodejs
- conda activate nbgrader 
+ conda create -n nbgrader3 python==3.8.1 jupyterlab nodejs
+ conda activate nbgrader3 
  ```
 
 ## Install nbgrader by following the instructions at nbgrader.readthedocs.io, development install.
