@@ -1,10 +1,11 @@
 
 
-# How to install 
+# How to install nbgrader-to-jupyterlab
 
 - common-lab 에 기초하여 조금씩 수정하면서 내가 만든 dev 버전으로 설치한 것이다. 
 - 실제로 해 본 것이다.
 - 20200619
+- 양성덕
 
 ## Make a clean conda environment.
 
