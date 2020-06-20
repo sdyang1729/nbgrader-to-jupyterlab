@@ -99,6 +99,16 @@ Remark:
 
 
 
+## Modify assignment_list/src/assignmentlist 
+
+At the moment, the [validate] button in the assignment_list labextension does not work. We fix it as follows. 
+
+The basic idea is to use the old validate_assignment nb-serverextension. 
+
+- define requestAPI2
+- modify requestAPI to requestAPI2; arguments should be changed appropriately.
+- rebuild jupyter lab. 
+
 ## Enjoy!
 
  ```
