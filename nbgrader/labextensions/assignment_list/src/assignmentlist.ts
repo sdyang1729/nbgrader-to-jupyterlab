@@ -492,11 +492,16 @@ class Notebook{
       button.setAttribute('disabled', 'disabled'); 
       const dataToSend = { path: that.data['path']}
       try {
-        const reply = await requestAPI<any>('assignments/validate', {
+/*         const reply = await requestAPI<any>('assignments/validate', {
           body: JSON.stringify(dataToSend),
           method: 'POST'
-        });
-  
+        }); */
+        const reply = await requestAPI3<any>(
+          'assignments/validate',
+          { method: 'POST' },
+          new Map([['path', that.data['path']]])  
+        );
+
         button.innerText = 'Validate'
         button.removeAttribute('disabled')
         that.validate(reply, button);
@@ -813,6 +818,49 @@ export async function requestAPI<T>(
   }
 
   const data = await response.json();
+
+  if (!response.ok) {
+    throw new ServerConnection.ResponseError(response, data.message);
+  }
+
+  return data;
+}
+
+/**
+ * +++++++++++++ Assignment List 화면에서 숙제 파일을 눌렀을 때 Validate 하는 기능에 대한 함수다.
+ * validateassignment.ts 에서 가져온 것임. 
+ * Call the API extension
+ *
+ * @param endPoint API REST end point for the extension
+ * @param init Initial values for the request
+ * @returns The response body interpreted as JSON
+ */
+export async function requestAPI3<T>(
+  endPoint = '',
+  init: RequestInit = {},
+  params: Map<string, string> = undefined
+): Promise<T> {
+  const searchParams = new URLSearchParams();
+  if (params != null) {
+    for (const entry of params.entries()) {
+      searchParams.append(entry[0], entry[1]);
+    }
+  }
+
+  // Make request to Jupyter API
+  const settings = ServerConnection.makeSettings();
+  const requestUrl = URLExt.join(
+    settings.baseUrl,
+    endPoint
+  ) + '?' + searchParams.toString();
+  let response: Response;
+  try {
+    response = await ServerConnection.makeRequest(requestUrl, init, settings);
+  } catch (error) {
+    throw new ServerConnection.NetworkError(error);
+  }
+
+  const data = await response.json();  
 
   if (!response.ok) {
     throw new ServerConnection.ResponseError(response, data.message);
