@@ -2,6 +2,8 @@
 
 The sole purpose of this repository is to share my experiences in **install**ing [nbgrader-to-jupyterlab](https://github.com/LibreTexts/nbgrader-to-jupyterlab)'s [lab-common](https://github.com/LibreTexts/nbgrader-to-jupyterlab/tree/lab-common) branch. The original README file for [common](https://github.com/LibreTexts/nbgrader-to-jupyterlab/tree/lab-common) branch is [README_original.md](./README_original.md).
 
+I am in an early stage of learning how to use git and GitHub, so there may be some unintended handlings of codes. I would be happy if you write any of your findings in the Issues, which I will fix as soon as I can.  
+
 Disclaimer: Please use this code at your own risk. 
 
 
