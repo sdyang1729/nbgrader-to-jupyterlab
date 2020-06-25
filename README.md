@@ -104,7 +104,13 @@ Enjoy!
 ## Remark
 
 - This installation method worked at least for me.
+
+	- Operating system: mac os Catalina 10.15.4
+	- nbgrader --version: 0.7.0.dev
+	- jupyter notebook --version: 6.0.3
+
 - If formgrader pops up but does not list the homeworks properly, check if your course directoty is well made.  
+
 - If you change a file, then save it and perform the following command to make it work.
 
   ```shell
