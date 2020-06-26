@@ -4,6 +4,13 @@ The sole purpose of this repository is to share my experiences in **install**ing
 
 I am in an early stage of learning how to use git and GitHub, so there may be some unintended handlings of codes. I would be happy if you write any of your findings in the Issues, which I will fix as soon as I can.  
 
+This installation method worked at least for me.
+
+- Operating system: mac os Catalina 10.15.4
+- nbgrader --version: 0.7.0.dev
+- jupyter notebook --version: 6.0.3
+
+
 Disclaimer: Please use this code at your own risk. 
 
 
@@ -102,12 +109,6 @@ Enjoy!
 
 
 ## Remark
-
-- This installation method worked at least for me.
-
-	- Operating system: mac os Catalina 10.15.4
-	- nbgrader --version: 0.7.0.dev
-	- jupyter notebook --version: 6.0.3
 
 - If formgrader pops up but does not list the homeworks properly, check if your course directoty is well made.  
 
